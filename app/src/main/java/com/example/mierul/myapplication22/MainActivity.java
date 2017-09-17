@@ -11,6 +11,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends BaseActivity {
 
+    private final String TAG = getClass().getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,17 +26,18 @@ public class MainActivity extends BaseActivity {
                 "testing6@hayoo.com",
                 "hayookkk",
                 new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.v(TAG,"login success");
+                        }
+                    }
+                });
+        firebaseEngine.setToken(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Log.v("naruto","login success");
-                }
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.v(TAG,"set token main success");
             }
         });
-
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-
-        //Displaying token on logcat
-        Log.v("naruto", "Refreshed token: " + refreshedToken);
     }
 }

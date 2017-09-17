@@ -6,6 +6,12 @@ import android.content.Context;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mierul on 9/15/2017.
@@ -18,5 +24,28 @@ public class FirebaseEngine {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(user,pass)
                 .addOnCompleteListener((Activity)context,completeListener);
+    }
+
+    public void setToken(OnCompleteListener<Void> onCompleteListener){
+
+        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+
+        //get child
+        DatabaseReference token = root.child("notification");
+
+        //get token
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        //child
+        String child_node = "token";
+
+        //getuid
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Map<String,String> token_map = new HashMap<>();
+        token_map.put(child_node,refreshedToken);
+
+        token.child(uId).setValue(token_map).addOnCompleteListener(onCompleteListener);
+
     }
 }
