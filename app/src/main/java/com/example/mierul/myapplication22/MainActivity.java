@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //setTitle("Home");
+        setTitle("Home");
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
