@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private FrameLayout fl_root;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.layout_toolbar);
+        toolbar = (Toolbar)findViewById(R.id.layout_toolbar);
         setSupportActionBar(toolbar);
 
         fl_root = (FrameLayout)findViewById(R.id.fl_root);
@@ -70,5 +71,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .popBackStackImmediate();
+    }
+
+    public Toolbar getToolBar() {
+        return toolbar;
     }
 }
