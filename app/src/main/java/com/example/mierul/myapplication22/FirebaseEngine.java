@@ -29,23 +29,27 @@ public class FirebaseEngine {
     public void setToken(OnCompleteListener<Void> onCompleteListener){
 
         DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-
         //get child
         DatabaseReference token = root.child("notification");
-
         //get token
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-
         //child
         String child_node = "token";
-
         //getuid
         String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         Map<String,String> token_map = new HashMap<>();
         token_map.put(child_node,refreshedToken);
-
         token.child(uId).setValue(token_map).addOnCompleteListener(onCompleteListener);
 
+    }
+
+    public boolean isLogin() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        return mAuth.getCurrentUser() != null;
+    }
+
+    public void signOut(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
     }
 }

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,64 +18,41 @@ import android.widget.FrameLayout;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private FrameLayout fl_root;
-    private Toolbar toolbar;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
-
-        toolbar = (Toolbar)findViewById(R.id.layout_toolbar);
-        setSupportActionBar(toolbar);
-
-        fl_root = (FrameLayout)findViewById(R.id.fl_root);
-
-        initHome();
-
-    }
-
-    private void initHome() {
-
-        View view_home = View.inflate(this,R.layout.view_home,null);
-
-        Button btn_home = (Button) view_home.findViewById(R.id.btn_home);
-        btn_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchFragment(new ScanFragment());
-            }
-        });
-
-        fl_root.addView(view_home);
-    }
-
     public void setTitle(String title){
         getSupportActionBar().setTitle(title);
     }
 
+    public void addFragment(Fragment fragment){
+        switchFragment(fragment,false);
+    }
+
     public void switchFragment(Fragment fragment){
+        switchFragment(fragment,true);
+    }
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fl_root,fragment)
-                .addToBackStack(null)
-                .commit();
+    private void switchFragment(Fragment fragment,boolean addToBackStack){
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_root,fragment);
+
+        if(addToBackStack){
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
+
+    }
+
+    public void cleanSwitchFragment(Fragment fragment){
+        //clear
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //add
+        addFragment(fragment);
     }
 
     public void switchBackFragment(){
 
         getSupportFragmentManager()
                 .popBackStackImmediate();
-    }
-
-    public Toolbar getToolBar() {
-        return toolbar;
     }
 }

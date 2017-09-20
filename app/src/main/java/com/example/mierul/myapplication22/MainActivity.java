@@ -1,45 +1,40 @@
 package com.example.mierul.myapplication22;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import android.widget.FrameLayout;
 
 public class MainActivity extends BaseActivity {
 
     private final String TAG = getClass().getSimpleName();
 
-
+    private FrameLayout fl_root;
+    private Toolbar toolbar;
     private DrawerLayout mDrawer;
-    private NavigationView nvDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setTitle("Home");
-
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 mDrawer,
-                getToolBar(),
+                toolbar,
                 R.string.drawer_open,
                 R.string.drawer_close);
 
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
         nvDrawer.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -49,28 +44,15 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
-
-
         FirebaseEngine firebaseEngine = new FirebaseEngine();
 
-        firebaseEngine.signInWithEmailAndPassword(this,
-                "testing6@hayoo.com",
-                "hayookkk",
-                new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.v(TAG,"login success");
-                        }
-                    }
-                });
-
-        firebaseEngine.setToken(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.v(TAG,"set token main success");
-            }
-        });
+        //set view for login or home
+        if(firebaseEngine.isLogin()){
+            initHome();
+        } else {
+            //show login page
+            initLogin();
+        }
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -100,4 +82,26 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+
+        toolbar = (Toolbar)findViewById(R.id.layout_toolbar);
+        setSupportActionBar(toolbar);
+
+        fl_root = (FrameLayout)findViewById(R.id.fl_root);
+
+    }
+
+    private void initHome() {
+        //switchFragment(HomeFragment.newInstance());
+        addFragment(HomeFragment.newInstance());
+    }
+
+    private void initLogin(){
+        addFragment(LoginFragment.newInstance());
+    }
+
+
 }
