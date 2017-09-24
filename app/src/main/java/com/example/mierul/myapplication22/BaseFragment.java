@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 /**
  * Created by mierul on 9/15/2017.
@@ -50,5 +51,9 @@ public abstract class BaseFragment extends Fragment {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    public void log(String message){
+        Log.d("naruto",message);
     }
 }

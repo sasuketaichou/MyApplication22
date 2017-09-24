@@ -95,7 +95,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initHome() {
-        //switchFragment(HomeFragment.newInstance());
         addFragment(HomeFragment.newInstance());
     }
 

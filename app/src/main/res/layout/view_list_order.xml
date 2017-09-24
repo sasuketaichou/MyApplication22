@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp"
+    android:padding="5dp"
+    android:background="@color/light_grey">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:id="@+id/checkOut_linear_layout"
+        android:orientation="vertical"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:src="@mipmap/ic_launcher"
+            android:padding="10dp"
+            android:id="@+id/checkOut_iv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Title"
+            android:id="@+id/checkOut_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <TableLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/checkOut_linear_layout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/checkOut_linear_layout"
+        android:layout_toEndOf="@+id/checkOut_linear_layout">
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <TextView
+                android:text="Address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_gravity="start"
+                android:text=" : "
+                />
+
+            <TextView
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_weight="1"
+                android:text="Product One"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkOut_tv_user_address"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Order" />
+
+            <TextView
+                android:layout_gravity="start"
+                android:text=" : "
+                />
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Product One"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkOut_tv_numOrder"/>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/grey"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOTAL" />
+
+            <TextView
+                android:layout_gravity="start"
+                android:text=" : "
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RM" />
+                <TextView
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkOut_tv_total"/>
+
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>

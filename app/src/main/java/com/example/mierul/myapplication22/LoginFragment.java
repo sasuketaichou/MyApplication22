@@ -26,6 +26,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private static final String TAG = LoginFragment.class.getSimpleName();
 
     private FirebaseEngine firebaseEngine;
+    private SoftKeyboardUtil skbUtil;
 
     private EditText username,password;
     private TextView tv_error;
@@ -42,6 +43,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         super.onCreate(savedInstanceState);
 
         firebaseEngine = new FirebaseEngine();
+        skbUtil = new SoftKeyboardUtil(getActivity());
         setTitle("Login");
     }
 
@@ -151,7 +153,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         getView().findViewById(R.id.loginLayout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                SoftKeyboardUtil skbUtil = new SoftKeyboardUtil(getActivity());
                 skbUtil.hideSoftKeyboard();
                 return true;
             }
@@ -159,5 +160,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
+        skbUtil.hideSoftKeyboard();
+        skbUtil.close();
+    }
 }

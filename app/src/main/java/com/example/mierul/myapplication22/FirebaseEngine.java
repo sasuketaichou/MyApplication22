@@ -8,6 +8,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
@@ -51,5 +52,24 @@ public class FirebaseEngine {
     public void signOut(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
+    }
+
+    public void getListOrder(String lastKey, ValueEventListener valueEventListener){
+
+        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference order = root.child("orders");
+
+        int limitTofirst = 10;
+
+        if(!lastKey.isEmpty()){
+            order.startAt(lastKey)
+                    .limitToFirst(limitTofirst)
+                    .addListenerForSingleValueEvent(valueEventListener);
+        } else {
+
+            order.limitToFirst(limitTofirst)
+                    .addListenerForSingleValueEvent(valueEventListener);
+        }
     }
 }
