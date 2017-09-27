@@ -36,12 +36,6 @@ public class HomeFragment extends BaseFragment {
     private ProgressBar progressBar;
     private OrderAdapter adapter;
 
-    private static final int PAGE_START = 0;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
-    private int TOTAL_PAGES = 3;
-    private int currentPage = PAGE_START;
-
     private String startAt;
 
     @Override
@@ -61,7 +55,6 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-        //set startAt equal to empty
         startAt = "";
 
         setTitle("Home");
@@ -83,63 +76,17 @@ public class HomeFragment extends BaseFragment {
         adapter = new OrderAdapter(getContext(),list);
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                isLoading = true;
-                currentPage += 1;
+        fetchData();
 
-                loadNextPage();
-            }
-
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
-            public int getTotalPageCount() {
-                return TOTAL_PAGES;
-            }
-
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                log("inside on load more");
+                fetchData();
             }
         });
 
-        loadFirstPage();
-
         return view;
-    }
-
-    private void loadFirstPage() {
-
-        progressBar.setVisibility(View.GONE);
-        //get first list of order
-        //update adapter
-        fetchData();
-
-        if (currentPage <= TOTAL_PAGES){
-            adapter.addLoading();
-        } else {
-            isLastPage = true;
-        }
-    }
-
-    private void loadNextPage() {
-
-        adapter.removeLoading();
-        isLoading = false;
-
-        //fetch next list of order
-        fetchData();
-
-        if (currentPage != TOTAL_PAGES){
-            adapter.addLoading();
-        } else {
-            isLastPage = true;
-        }
     }
 
     public static HomeFragment newInstance() {
@@ -163,7 +110,14 @@ public class HomeFragment extends BaseFragment {
 
         switch (id){
             case R.id.action_logout:
-                firebaseEngine.signOut();
+                firebaseEngine.signOut(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.v(TAG,"Sign out with clear token ");
+                        }
+                    }
+                });
                 cleanSwitchFragment(LoginFragment.newInstance());
                 break;
         }
@@ -173,10 +127,13 @@ public class HomeFragment extends BaseFragment {
     public void fetchData() {
 
         final String previousKey = startAt;
+        log("Previous Key : "+previousKey);
 
         firebaseEngine.getListOrder(startAt,new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                log("inside on datachange : "+dataSnapshot);
 
                 List<OrderNode> list_node = new ArrayList<>();
 
@@ -190,20 +147,17 @@ public class HomeFragment extends BaseFragment {
                     if(!order.iterator().hasNext()){
                         //set value of lastKey
                         startAt = mSnapshot.getKey();
-                        if(previousKey.equals(startAt)){
-                            isLastPage = true;
+                        log("Key : "+mSnapshot.getKey());
+                        if(!previousKey.equals(startAt)){
+                            //set item
+                            adapter.addItem(list_node);
+
+                            //hide progressbar
+                            progressBar.setVisibility(View.GONE);
                         }
                         log("List size : "+list_node.size()+"\nstartAt : "+startAt);
                     }
                 }
-
-                //update adapter
-                if(!isLastPage){
-                    adapter.addItem(list_node);
-                } else {
-                    adapter.removeLoading();
-                }
-
             }
 
             @Override

@@ -66,12 +66,12 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 ImageView imageView = orderVH.imageView;
 
-                Glide.with(context)
-                        .load(model.url)
-                        .into(imageView);
+//                Glide.with(context)
+//                        .load(model.url)
+//                        .into(imageView);
 
                 TextView address = orderVH.address;
-                address.setText(model.address);
+                address.setText(model.productAddress);
 
                 TextView order = orderVH.order;
                 order.setText(model.numOrder);
@@ -91,7 +91,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        return (position == list.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
+        return (list.get(position) == null) ? LOADING : ITEM;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         isLoadingAdded = true;
 
         //add loading to list
-        list.add(new OrderNode());
+        list.add(null);
 
     }
 
@@ -122,9 +122,8 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         isLoadingAdded = false;
 
         int last_position = list.size() - 1;
-         OrderNode itemLoading = list.get(last_position);
 
-        if (itemLoading != null) {
+        if (list.get(last_position) != null) {
             list.remove(last_position);
             notifyItemRemoved(last_position);
         }

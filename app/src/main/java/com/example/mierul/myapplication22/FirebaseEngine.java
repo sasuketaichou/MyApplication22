@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by mierul on 9/15/2017.
  */
 
-public class FirebaseEngine {
+public class FirebaseEngine extends BaseFirebase {
 
     public void signInWithEmailAndPassword(Context context, String user, String pass,OnCompleteListener<AuthResult> completeListener){
 
@@ -29,19 +29,20 @@ public class FirebaseEngine {
 
     public void setToken(OnCompleteListener<Void> onCompleteListener){
 
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        //get child
-        DatabaseReference token = root.child("notification");
+        //get ref token
+        DatabaseReference token_ref = super.getTokenRef();
         //get token
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        //child
-        String child_node = "token";
-        //getuid
-        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Map<String,String> token_map = new HashMap<>();
-        token_map.put(child_node,refreshedToken);
-        token.child(uId).setValue(token_map).addOnCompleteListener(onCompleteListener);
 
+        Map<String,String> token_map = new HashMap<>();
+        token_map.put(CHILD_TOKEN,refreshedToken);
+        token_ref.setValue(token_map).addOnCompleteListener(onCompleteListener);
+    }
+
+    private void clearToken(OnCompleteListener<Void> onCompleteListener){
+        //get token
+        DatabaseReference tokenRef = super.getTokenRef();
+        tokenRef.removeValue().addOnCompleteListener(onCompleteListener);
     }
 
     public boolean isLogin() {
@@ -49,26 +50,29 @@ public class FirebaseEngine {
         return mAuth.getCurrentUser() != null;
     }
 
-    public void signOut(){
+    public void signOut(OnCompleteListener<Void> onCompleteListener){
+        //clear token
+        clearToken(onCompleteListener);
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
     }
 
     public void getListOrder(String lastKey, ValueEventListener valueEventListener){
 
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference order = super.getOrdersRef();
 
-        DatabaseReference order = root.child("orders");
-
-        int limitTofirst = 10;
+        int limitTofirst = 5;
 
         if(!lastKey.isEmpty()){
-            order.startAt(lastKey)
+            order.orderByKey()
+                    .startAt(lastKey)
                     .limitToFirst(limitTofirst)
                     .addListenerForSingleValueEvent(valueEventListener);
         } else {
 
-            order.limitToFirst(limitTofirst)
+            order.orderByKey()
+                    .limitToFirst(limitTofirst)
                     .addListenerForSingleValueEvent(valueEventListener);
         }
     }

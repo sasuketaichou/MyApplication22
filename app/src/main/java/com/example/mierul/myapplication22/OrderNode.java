@@ -9,30 +9,38 @@ import android.os.Parcelable;
 
 public class OrderNode implements Parcelable {
 
+    public String productAddress;
+    public String productNote;
     public String productName;
     public String numOrder;
     public String picKey;
-    public String ordKey;
-    public String url;
-    public String address;
-    public String note;
     public String total;
-    public String usrOrdKey;
 
     public OrderNode(){
-
     }
 
     protected OrderNode(Parcel in) {
+        productAddress = in.readString();
+        productNote = in.readString();
         productName = in.readString();
         numOrder = in.readString();
         picKey = in.readString();
-        ordKey = in.readString();
-        url = in.readString();
-        address = in.readString();
-        note = in.readString();
         total = in.readString();
-        usrOrdKey = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(productAddress);
+        dest.writeString(productNote);
+        dest.writeString(productName);
+        dest.writeString(numOrder);
+        dest.writeString(picKey);
+        dest.writeString(total);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<OrderNode> CREATOR = new Creator<OrderNode>() {
@@ -46,22 +54,4 @@ public class OrderNode implements Parcelable {
             return new OrderNode[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(productName);
-        dest.writeString(numOrder);
-        dest.writeString(picKey);
-        dest.writeString(ordKey);
-        dest.writeString(url);
-        dest.writeString(address);
-        dest.writeString(note);
-        dest.writeString(total);
-        dest.writeString(usrOrdKey);
-    }
 }

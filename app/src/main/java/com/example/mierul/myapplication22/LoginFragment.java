@@ -66,6 +66,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         Button buttonRegister = (Button)view.findViewById(R.id.btn_register);
         buttonRegister.setOnClickListener(this);
 
+        //TODO show user error related to login
+
         return view;
     }
 
