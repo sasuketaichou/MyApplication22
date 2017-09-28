@@ -58,20 +58,20 @@ public class FirebaseEngine extends BaseFirebase {
         mAuth.signOut();
     }
 
-    public void getListOrder(String lastKey, ValueEventListener valueEventListener){
+    public void getListOrder(long lastKey, ValueEventListener valueEventListener){
 
         DatabaseReference order = super.getOrdersRef();
 
         int limitTofirst = 5;
 
-        if(!lastKey.isEmpty()){
-            order.orderByKey()
+        if(lastKey != 0){
+            order.orderByChild("timestamp")
                     .startAt(lastKey)
                     .limitToFirst(limitTofirst)
                     .addListenerForSingleValueEvent(valueEventListener);
         } else {
 
-            order.orderByKey()
+            order.orderByChild("timestamp")
                     .limitToFirst(limitTofirst)
                     .addListenerForSingleValueEvent(valueEventListener);
         }

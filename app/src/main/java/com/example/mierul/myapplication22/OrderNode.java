@@ -15,9 +15,11 @@ public class OrderNode implements Parcelable {
     public String numOrder;
     public String picKey;
     public String total;
+    private long timestamp;
 
     public OrderNode(){
     }
+
 
     protected OrderNode(Parcel in) {
         productAddress = in.readString();
@@ -26,6 +28,7 @@ public class OrderNode implements Parcelable {
         numOrder = in.readString();
         picKey = in.readString();
         total = in.readString();
+        timestamp = in.readLong();
     }
 
     @Override
@@ -36,6 +39,7 @@ public class OrderNode implements Parcelable {
         dest.writeString(numOrder);
         dest.writeString(picKey);
         dest.writeString(total);
+        dest.writeLong(timestamp);
     }
 
     @Override
@@ -54,4 +58,60 @@ public class OrderNode implements Parcelable {
             return new OrderNode[size];
         }
     };
+
+    public String getProductAddress() {
+        return productAddress;
+    }
+
+    public void setProductAddress(String productAddress) {
+        this.productAddress = productAddress;
+    }
+
+    public String getProductNote() {
+        return productNote;
+    }
+
+    public void setProductNote(String productNote) {
+        this.productNote = productNote;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getNumOrder() {
+        return numOrder;
+    }
+
+    public void setNumOrder(String numOrder) {
+        this.numOrder = numOrder;
+    }
+
+    public String getPicKey() {
+        return picKey;
+    }
+
+    public void setPicKey(String picKey) {
+        this.picKey = picKey;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 }

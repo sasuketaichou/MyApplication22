@@ -36,7 +36,7 @@ public class HomeFragment extends BaseFragment {
     private ProgressBar progressBar;
     private OrderAdapter adapter;
 
-    private String startAt;
+    private long startAt = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,8 +54,6 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-
-        startAt = "";
 
         setTitle("Home");
     }
@@ -126,7 +124,7 @@ public class HomeFragment extends BaseFragment {
 
     public void fetchData() {
 
-        final String previousKey = startAt;
+        final long previousKey = startAt;
         log("Previous Key : "+previousKey);
 
         firebaseEngine.getListOrder(startAt,new ValueEventListener() {
@@ -146,9 +144,9 @@ public class HomeFragment extends BaseFragment {
 
                     if(!order.iterator().hasNext()){
                         //set value of lastKey
-                        startAt = mSnapshot.getKey();
+                        startAt = orderNode.getTimestamp();
                         log("Key : "+mSnapshot.getKey());
-                        if(!previousKey.equals(startAt)){
+                        if(previousKey != startAt){
                             //set item
                             adapter.addItem(list_node);
 
