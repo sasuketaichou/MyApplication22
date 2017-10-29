@@ -15,6 +15,7 @@ public class OrderNode implements Parcelable {
     public String numOrder;
     public String picKey;
     public String total;
+    public String url;
     private long timestamp;
 
     public OrderNode(){
@@ -29,6 +30,7 @@ public class OrderNode implements Parcelable {
         picKey = in.readString();
         total = in.readString();
         timestamp = in.readLong();
+        url = in.readString();
     }
 
     @Override
@@ -40,6 +42,7 @@ public class OrderNode implements Parcelable {
         dest.writeString(picKey);
         dest.writeString(total);
         dest.writeLong(timestamp);
+        dest.writeString(url);
     }
 
     @Override

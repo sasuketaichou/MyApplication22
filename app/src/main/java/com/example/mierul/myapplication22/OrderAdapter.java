@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ import java.util.List;
 public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<OrderNode> list;
+    private List<ProductUrlPictureModel> productUrlPictureModels;
     private Context context;
 
     private boolean isLoadingAdded = false;
@@ -27,9 +29,9 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int ITEM = 0;
     private final int LOADING = 1;
 
-    public OrderAdapter(Context context,List<OrderNode> list){
-        this.list = list;
+    public OrderAdapter(Context context) {
         this.context = context;
+        this.list = new ArrayList<>();
     }
 
     @Override
@@ -66,9 +68,9 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 ImageView imageView = orderVH.imageView;
 
-//                Glide.with(context)
-//                        .load(model.url)
-//                        .into(imageView);
+                Glide.with(context)
+                        .load(model.url)
+                        .into(imageView);
 
                 TextView address = orderVH.address;
                 address.setText(model.productAddress);
@@ -102,6 +104,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void addItem(List<OrderNode> latest){
 
         list.addAll(latest);
+        setUrl();
         notifyDataSetChanged();
     }
 
@@ -126,6 +129,26 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (list.get(last_position) != null) {
             list.remove(last_position);
             notifyItemRemoved(last_position);
+        }
+    }
+
+    public void addPicture(List<ProductUrlPictureModel> productUrlPictureModels) {
+        //fetch picture
+        this.productUrlPictureModels = productUrlPictureModels;
+    }
+
+    private void setUrl() {
+
+        for (OrderNode model : list) {
+            //pModel is null when app is resume
+            if (productUrlPictureModels != null) {
+                for (ProductUrlPictureModel pModel : productUrlPictureModels) {
+                    if (pModel.key.equals(model.picKey)) {
+                        model.url = pModel.image_1;
+                    }
+                }
+            }
+
         }
     }
 

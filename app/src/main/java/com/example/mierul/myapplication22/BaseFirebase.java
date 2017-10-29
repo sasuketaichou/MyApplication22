@@ -59,4 +59,8 @@ public abstract class BaseFirebase {
     private DatabaseReference getUsersOrderRef(){
         return getUsersRef().child(CHILD_ORDER);
     }
+
+    public DatabaseReference getProductImageRef() {
+        return getRootRef().child(ROOT_PRODUCT).child(CHILD_IMAGE);
+    }
 }

@@ -71,7 +71,7 @@ public class HomeFragment extends BaseFragment {
         recyclerView = (RecyclerView)view.findViewById(R.id.rv_home_fragment);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new OrderAdapter(getContext(),list);
+        adapter = new OrderAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
         fetchData();
@@ -84,7 +84,36 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
+        fetchProductPicture();
+
         return view;
+    }
+
+    private void fetchProductPicture() {
+
+        //after adapter is created, fetch picture
+        firebaseEngine.getProductPicture(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> productChildImage = dataSnapshot.getChildren();
+
+                List<ProductUrlPictureModel> productUrlPictureModels = new ArrayList<>();
+                for (DataSnapshot mSnapshot : productChildImage) {
+                    ProductUrlPictureModel model = mSnapshot.getValue(ProductUrlPictureModel.class);
+                    model.addKey(mSnapshot.getKey());
+                    productUrlPictureModels.add(model);
+                }
+
+                adapter.addPicture(productUrlPictureModels);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public static HomeFragment newInstance() {
@@ -130,8 +159,6 @@ public class HomeFragment extends BaseFragment {
         firebaseEngine.getListOrder(startAt,new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                log("inside on datachange : "+dataSnapshot);
 
                 List<OrderNode> list_node = new ArrayList<>();
 

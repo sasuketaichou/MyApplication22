@@ -76,4 +76,12 @@ public class FirebaseEngine extends BaseFirebase {
                     .addListenerForSingleValueEvent(valueEventListener);
         }
     }
+
+    public void getProductPicture(ValueEventListener valueEventListener) {
+
+        DatabaseReference productImageRef = super.getProductImageRef();
+        productImageRef.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+
 }
