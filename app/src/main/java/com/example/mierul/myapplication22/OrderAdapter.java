@@ -1,6 +1,7 @@
 package com.example.mierul.myapplication22;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,8 +105,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void addItem(List<OrderNode> latest){
 
         list.addAll(latest);
-        setUrl();
-        notifyDataSetChanged();
+        setUrl(latest);
     }
 
     public void removeItem(int position){
@@ -137,19 +137,37 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.productUrlPictureModels = productUrlPictureModels;
     }
 
-    private void setUrl() {
+    private void setUrl(List<OrderNode> latest) {
 
-        for (OrderNode model : list) {
+        for (final OrderNode model : latest) {
             //pModel is null when app is resume
             if (productUrlPictureModels != null) {
-                for (ProductUrlPictureModel pModel : productUrlPictureModels) {
-                    if (pModel.key.equals(model.picKey)) {
-                        model.url = pModel.image_1;
-                    }
-                }
-            }
+                loadUrl(model);
 
+            } else {
+                //do in background if product picture model is null
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        loadUrl(model);
+                    }
+                }, 0);
+
+            }
         }
+    }
+
+    private void loadUrl(OrderNode model) {
+
+        for (ProductUrlPictureModel pModel : productUrlPictureModels) {
+            if (pModel.key.equals(model.picKey)) {
+                model.url = pModel.image_1;
+                break;
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {

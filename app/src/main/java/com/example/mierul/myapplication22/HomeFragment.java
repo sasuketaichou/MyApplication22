@@ -48,9 +48,9 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Log.v(TAG,"Set token successfull");
+                    Log.v(TAG, "Set token successful");
                 } else {
-                    Log.e(TAG,"Set token unsuccessfull : "+task.getException());
+                    Log.e(TAG, "Set token unsuccessful : " + task.getException());
                 }
             }
         });
@@ -66,8 +66,6 @@ public class HomeFragment extends BaseFragment {
 
         progressBar = (ProgressBar) view.findViewById(R.id.loading_home);
 
-        List<OrderNode> list = new ArrayList<>();
-
         recyclerView = (RecyclerView)view.findViewById(R.id.rv_home_fragment);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -79,7 +77,6 @@ public class HomeFragment extends BaseFragment {
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                log("inside on load more");
                 fetchData();
             }
         });
@@ -154,7 +151,7 @@ public class HomeFragment extends BaseFragment {
     public void fetchData() {
 
         final long previousKey = startAt;
-        log("Previous Key : "+previousKey);
+        Log.v(TAG, "Previous key : " + previousKey);
 
         firebaseEngine.getListOrder(startAt,new ValueEventListener() {
             @Override
@@ -172,7 +169,6 @@ public class HomeFragment extends BaseFragment {
                     if(!order.iterator().hasNext()){
                         //set value of lastKey
                         startAt = orderNode.getTimestamp();
-                        log("Key : "+mSnapshot.getKey());
                         if(previousKey != startAt){
                             //set item
                             adapter.addItem(list_node);
@@ -180,14 +176,14 @@ public class HomeFragment extends BaseFragment {
                             //hide progressbar
                             progressBar.setVisibility(View.GONE);
                         }
-                        log("List size : "+list_node.size()+"\nstartAt : "+startAt);
+                        Log.v(TAG, "List size : " + list_node.size() + "\nstartAt : " + startAt);
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                log("Database error : "+databaseError.getMessage());
+                Log.v(TAG, "Database error : " + databaseError.getMessage());
             }
         });
 
