@@ -36,7 +36,8 @@ public class HomeFragment extends BaseFragment {
     private ProgressBar progressBar;
     private OrderAdapter adapter;
 
-    private long startAt = 0;
+    private long defaultValue = 0;
+    private long startAt = defaultValue;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class HomeFragment extends BaseFragment {
         adapter = new OrderAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
-        fetchData();
+        fetchProductPicture();
 
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -80,8 +81,6 @@ public class HomeFragment extends BaseFragment {
                 fetchData();
             }
         });
-
-        fetchProductPicture();
 
         return view;
     }
@@ -103,6 +102,9 @@ public class HomeFragment extends BaseFragment {
                 }
 
                 adapter.addPicture(productUrlPictureModels);
+
+                //fetch data for first load
+                fetchData();
             }
 
             @Override
@@ -176,6 +178,7 @@ public class HomeFragment extends BaseFragment {
                             //hide progressbar
                             progressBar.setVisibility(View.GONE);
                         }
+
                         Log.v(TAG, "List size : " + list_node.size() + "\nstartAt : " + startAt);
                     }
                 }

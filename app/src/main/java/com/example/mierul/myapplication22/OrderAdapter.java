@@ -143,17 +143,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             //pModel is null when app is resume
             if (productUrlPictureModels != null) {
                 loadUrl(model);
-
-            } else {
-                //do in background if product picture model is null
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        loadUrl(model);
-                    }
-                }, 0);
-
             }
         }
     }

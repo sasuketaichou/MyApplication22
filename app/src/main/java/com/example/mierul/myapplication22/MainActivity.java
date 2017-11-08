@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity {
 
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
+                switchFragment(new ReportAnalysisFragment());
 
                 break;
             case R.id.nav_second_fragment:
@@ -68,6 +69,8 @@ public class MainActivity extends BaseActivity {
 
                 break;
             }
+
+        mDrawer.closeDrawers();
         }
 
     @Override

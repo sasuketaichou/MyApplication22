@@ -4,7 +4,7 @@
         <item
             android:id="@+id/nav_first_fragment"
             android:icon="@mipmap/ic_launcher"
-            android:title="First" />
+            android:title="Report" />
         <item
             android:id="@+id/nav_second_fragment"
             android:icon="@mipmap/ic_launcher"
