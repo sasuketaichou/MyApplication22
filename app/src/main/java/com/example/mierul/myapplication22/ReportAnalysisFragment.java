@@ -2,14 +2,20 @@ package com.example.mierul.myapplication22;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -28,6 +34,7 @@ public class ReportAnalysisFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -36,14 +43,18 @@ public class ReportAnalysisFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_reportanalysis, container, false);
 
-        LineChart chart = (LineChart) view.findViewById(R.id.line_chart);
+        setTitle("Report");
 
-        setData(chart);
+        LineChart linechart = (LineChart) view.findViewById(R.id.line_chart);
+        setLineData(linechart);
+
+        BarChart barChart = (BarChart) view.findViewById(R.id.bar_chart);
+        setBarData(barChart);
 
         return view;
     }
 
-    private void setData(LineChart mLineChart) {
+    private void setLineData(LineChart mLineChart) {
 
         List<Entry> valsComp1 = new ArrayList<>();
         List<Entry> valsComp2 = new ArrayList<>();
@@ -63,7 +74,7 @@ public class ReportAnalysisFragment extends BaseFragment {
         LineDataSet setComp2 = new LineDataSet(valsComp2, "Company 2");
         setComp2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        List<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(setComp1);
         dataSets.add(setComp2);
 
@@ -84,5 +95,32 @@ public class ReportAnalysisFragment extends BaseFragment {
         XAxis xAxis = mLineChart.getXAxis();
         xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
         xAxis.setValueFormatter(formatter);
+    }
+
+    private void setBarData(BarChart chart) {
+
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0f, 30f));
+        entries.add(new BarEntry(1f, 80f));
+        entries.add(new BarEntry(2f, 60f));
+        entries.add(new BarEntry(3f, 50f));
+        // gap of 2f
+        entries.add(new BarEntry(5f, 70f));
+        entries.add(new BarEntry(6f, 60f));
+
+        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+
+        BarData data = new BarData(set);
+        data.setBarWidth(0.9f); // set custom bar width
+        chart.setData(data);
+        chart.setFitBars(true); // make the x-axis fit exactly all bars
+        chart.invalidate(); // refresh
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.v("naruto", "report fragment");
+        return super.onOptionsItemSelected(item);
     }
 }

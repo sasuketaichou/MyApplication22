@@ -37,7 +37,7 @@ public class HomeFragment extends BaseFragment {
     private OrderAdapter adapter;
 
     private long defaultValue = 0;
-    private long startAt = defaultValue;
+    private long startAt;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,8 +55,6 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-
-        setTitle("Home");
     }
 
     @Nullable
@@ -64,6 +62,9 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.view_home,container,false);
+
+        startAt = defaultValue;
+        setTitle("Home");
 
         progressBar = (ProgressBar) view.findViewById(R.id.loading_home);
 
@@ -189,7 +190,5 @@ public class HomeFragment extends BaseFragment {
                 Log.v(TAG, "Database error : " + databaseError.getMessage());
             }
         });
-
-
     }
 }
