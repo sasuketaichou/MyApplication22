@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -19,8 +20,12 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +56,25 @@ public class ReportAnalysisFragment extends BaseFragment {
         BarChart barChart = (BarChart) view.findViewById(R.id.bar_chart);
         setBarData(barChart);
 
+        PieChart pieChart = (PieChart) view.findViewById(R.id.pie_chart);
+        setPieData(pieChart);
+
         return view;
+    }
+
+    private void setPieData(PieChart pieChart) {
+        List<PieEntry> entries = new ArrayList<>();
+
+        entries.add(new PieEntry(18.5f, "Green"));
+        entries.add(new PieEntry(26.7f, "Yellow"));
+        entries.add(new PieEntry(24.0f, "Red"));
+        entries.add(new PieEntry(30.8f, "Blue"));
+
+        PieDataSet set = new PieDataSet(entries, "Election Results");
+        set.setColors(ColorTemplate.MATERIAL_COLORS);
+        PieData data = new PieData(set);
+        pieChart.setData(data);
+        pieChart.invalidate(); // refresh
     }
 
     private void setLineData(LineChart mLineChart) {
@@ -116,11 +139,5 @@ public class ReportAnalysisFragment extends BaseFragment {
         chart.setFitBars(true); // make the x-axis fit exactly all bars
         chart.invalidate(); // refresh
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.v("naruto", "report fragment");
-        return super.onOptionsItemSelected(item);
     }
 }
